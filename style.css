@@ -1,0 +1,12 @@
+div {
+    height: 400px;
+    width: 300px;
+}
+
+.card {
+    height: 300px;
+    width: 200px;
+    background-color: whitesmoke;
+    border: solid black 1px;
+    border-radius:  10px;
+}
