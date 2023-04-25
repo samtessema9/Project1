@@ -4,9 +4,26 @@ div {
 }
 
 .card {
-    height: 300px;
-    width: 200px;
+    height: 100%;
+    width: 100%;
     background-color: whitesmoke;
     border: solid black 1px;
     border-radius:  10px;
 }
+
+#parent {
+    display: grid;
+    grid-template-columns: 25px repeat(10, 1fr) 25px;
+    grid-template-rows: 25px repeat(6, 1fr) 25px;
+    grid-column-gap: 5px;
+    grid-row-gap: 5px;
+    }
+    
+#div1 { grid-area: 2 / 4 / 3 / 5; }
+#div2 { grid-area: 2 / 5 / 4 / 6; }
+#div3 { grid-area: 2 / 6 / 4 / 7; }
+#div4 { grid-area: 5 / 4 / 6 / 5; }
+#div5 { grid-area: 5 / 5 / 7 / 6; }
+#div6 { grid-area: 5 / 6 / 7 / 7; }
+#div7 { grid-area: 7 / 8 / 8 / 9; }
+#div8 { grid-area: 7 / 10 / 8 / 11; }
