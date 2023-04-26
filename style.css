@@ -48,7 +48,12 @@
 #stay { grid-area: 8 / 5 / 9 / 6; }
 #hit { grid-area: 8 / 6 / 9 / 7; }
 #double { grid-area: 8 / 7 / 9 / 8; }
-#wallet { grid-area: 8 / 10 / 9 / 12; }
+#wallet { 
+    grid-area: 8 / 10 / 9 / 12; 
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
 
 button {
     width: 100%;

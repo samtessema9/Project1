@@ -1,184 +1,237 @@
-// require lodash
-// const _ = require('lodash');
+import {Card, Deck, Player, Dealer} from './classes.js'
 
 
+// const dealInitial = (deck) => {
+//     deck.shuffle()
+//     let playerCards = [];
+//     let dealerCards = [];
 
+//     let faceDownCard = deck.deck.pop()
+//     dealerCards.push(faceDownCard)
+//     let d1 = document.getElementById('dealer-1')
+//     // d1.innerHTML = ''
+//     d1.appendChild(deck.flippeCard())
+    
+//     let playerCard1 = deck.deck.pop()
+//     playerCards.push(playerCard1)
+//     let p1 = document.getElementById('player-1')
+//     // p1.innerHTML = ''
+//     p1.appendChild(deck.deal(playerCard1))
+    
+//     let dealerCard2 = deck.deck.pop()
+//     dealerCards.push(dealerCard2)
+//     let d2 = document.getElementById('dealer-2')
+//     // d2.innerHTML = ''
+//     d2.appendChild(deck.deal(dealerCard2))
 
-// Create a car object
-class Card {
-    constructor(name, suit, value) {
-        this.name = name;
-        this.value = value;
-        this.suit = suit;
-    }
+//     let playerCard2 = deck.deck.pop()
+//     playerCards.push(playerCard2)
+//     let p2 = document.getElementById('player-2')
+//     // p2.innerHTML = ''
+//     p2.appendChild(deck.deal(playerCard2))
 
-    createElement () {
-        let img = document.createElement('img');
-        img.src = `images/${this.suit}-${this.name}.svg`;
-        img.classList.add('card', 'generated');
-        return img;
-    }
+//     return {dealerCards, playerCards}
+// }
+
+// const runGame = () => {
+//     const deck = new Deck();
+//     let playerDivs = ['player-3', 'player-4', 'player-5']
+//     let playerPointer = 0
+//     let dealerDivs = ['dealer-3', 'dealer-4', 'dealer-5']
+//     let dealerPointer = 0
+//     let init = dealInitial(deck)
+
+//     const resetGame = () => {
+//         let generated = document.querySelectorAll('.generated')
+//         console.log(generated)
+//         for (let element of generated) {
+//             element.remove()
+//         }
+
+//         let buttons = document.getElementsByClassName('button');
+//         console.log(buttons)
+//         for (let button of buttons) {
+//             button.disabled = false;
+//         //     if (button.className.includes('hit-button')) {
+//         //         button.removeEventListener('click', rem)
+//         //     }
+//         }
+//         document.getElementById('output').innerText = ``        
+//     }
+
+//     let dealertotal = init.dealerCards.reduce((acc, card) => acc + card.value, 0)
+//     console.log('dealertotal: ', dealertotal)
+
+//     let playertotal = init.playerCards.reduce((acc, card) => acc + card.value, 0)
+//     console.log('playertotal: ', playertotal)
+
+//     let hit = document.getElementById('hit-button')
+//     hit.addEventListener('click', function rem (e) {
+//         let card = deck.deck.pop()
+//         // init.playerCards.push(card)
+//         document.getElementById(playerDivs[playerPointer]).appendChild(deck.deal(card))
+//         playerPointer++
+//         playertotal += card.value;
+//         console.log('playertotal: ', playertotal)
+//         if (playertotal >= 21) {
+//             e.target.disabled = true;
+//             document.getElementById('output').innerText = `Dealer wins!!`
+//             // runGame()
+//             // resetGame()
+            
+//             setTimeout(runGame, 3000)
+//             console.log('dealer wins')
+//         }
+//     })
+
+//     let stay = document.getElementById('stay-button')
+//     stay.addEventListener('click', (e) => {
+//         hit.disabled = true;
+//         console.log(hit)
+//         e.target.disabled = true;
+//         // handleStay()
+//     })
+// }
+
+// runGame()
+
+const working = () => {
+    console.log('working')
 }
 
 
-// Create a deck class
-class Deck {
-    constructor () {
-        const names = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
-        const suits = ['spades', 'clubs', 'diamonds', 'hearts'];
-        this.deck = [];
-        for (let name of names) {
-            for (let suit of suits) {
-                if (parseInt(name)) {
-                    this.deck.push(new Card(name, suit, parseInt(name)))
-                } else if (name == 'A') {
-                    this.deck.push(new Card(name, suit, 11))
-                } else {
-                    this.deck.push(new Card(name, suit, 10))
-                }
-            }
-        }
-    }
-
-    shuffle () {
-        this.deck = this.deck.sort((a, b) => 0.5 - Math.random())
-    }
-
-    deal (card) {
-        // let card = this.deck.pop();
-        return card.createElement();
-    }
-
-    cardsLeft () {
-        return this.deck.length
-    }
-
-    flippeCard  () {
-        let card = document.createElement('img');
-        card.src = 'images/blue.svg';
-        card.classList.add('card', 'generated')
-        return card;
-    }
-}
-
-
-const dealInitial = (deck) => {
+const dealInitial = (deck, player, dealer) => {
     deck.shuffle()
-    let playerCards = [];
-    let dealerCards = [];
 
     let faceDownCard = deck.deck.pop()
-    dealerCards.push(faceDownCard)
+    dealer.hit(faceDownCard)
     let d1 = document.getElementById('dealer-1')
-    // d1.innerHTML = ''
+    d1.innerHTML = ''
     d1.appendChild(deck.flippeCard())
     
     let playerCard1 = deck.deck.pop()
-    playerCards.push(playerCard1)
+    player.hit(playerCard1)
     let p1 = document.getElementById('player-1')
-    // p1.innerHTML = ''
+    p1.innerHTML = ''
     p1.appendChild(deck.deal(playerCard1))
     
     let dealerCard2 = deck.deck.pop()
-    dealerCards.push(dealerCard2)
+    dealer.hit(dealerCard2)
     let d2 = document.getElementById('dealer-2')
-    // d2.innerHTML = ''
+    d2.innerHTML = ''
     d2.appendChild(deck.deal(dealerCard2))
 
     let playerCard2 = deck.deck.pop()
-    playerCards.push(playerCard2)
+    player.hit(playerCard2)
     let p2 = document.getElementById('player-2')
-    // p2.innerHTML = ''
+    p2.innerHTML = ''
     p2.appendChild(deck.deal(playerCard2))
-
-    return {dealerCards: dealerCards, 
-            playerCards: playerCards
-        }
 }
 
-
-// let func = dealInitial(new Deck())
-
-// console.log(func.dealerCards)
-
-// let dealertotal = func.dealerCards.reduce((acc, card) => acc + card.value, 0)
-
-// console.log('dealertotal: ', dealertotal)
-
-// let playertotal = 0
-// for (let card of func.playerCards) {
-//     playertotal += card.value
-// }
-// console.log('player total: ',playertotal)
-
-
-const runGame = () => {
-    const deck = new Deck();
-    let playerDivs = ['player-3', 'player-4', 'player-5']
-    let playerPointer = 0
-    let dealerDivs = ['dealer-3', 'dealer-4', 'dealer-5']
+const runGame = (deck, player, dealer) => {
+    let outPut = document.getElementById('output')
+    dealInitial(deck, player, dealer)
+    console.log('dealer: ' + dealer.total())
+    console.log('player: ' + player.total())
+    console.log(player.hand)
     let dealerPointer = 0
-    let init = dealInitial(deck)
+    let playerPointer = 0
 
     const resetGame = () => {
         let generated = document.querySelectorAll('.generated')
-        console.log(generated)
         for (let element of generated) {
             element.remove()
         }
-
-        let buttons = document.getElementsByClassName('button');
-        console.log(buttons)
-        for (let button of buttons) {
-            button.disabled = false;
-        //     if (button.className.includes('hit-button')) {
-        //         button.removeEventListener('click', rem)
-        //     }
+        let buttons = document.querySelectorAll('.button')
+        for (let element of buttons) {
+            element.disabled = false;
         }
-        document.getElementById('output').innerText = ``        
+        player.clearHand()
+        dealer.clearHand()
+        outPut.innerText = ''
+
+        runGame(deck, player, dealer)
+    }
+    
+    if (player.total() == 21) {
+        outPut.innerText = 'Blackjack!!!'
+        // resetGame()
+    } else if (dealer.total() == 21) {
+        outPut.innerText = 'Dealer Blackjack :('
+        // resetGame()
     }
 
-    let dealertotal = init.dealerCards.reduce((acc, card) => acc + card.value, 0)
-    console.log('dealertotal: ', dealertotal)
-
-    let playertotal = init.playerCards.reduce((acc, card) => acc + card.value, 0)
-    console.log('playertotal: ', playertotal)
-
-    let hit = document.getElementById('hit-button')
-    hit.addEventListener('click', function rem (e) {
+    let hitButton = document.getElementById('hit-button')
+    hitButton.addEventListener('click', (e) => {
         let card = deck.deck.pop()
-        // init.playerCards.push(card)
-        document.getElementById(playerDivs[playerPointer]).appendChild(deck.deal(card))
-        playerPointer++
-        playertotal += card.value;
-        console.log('playertotal: ', playertotal)
-        if (playertotal >= 21) {
+        player.hit(card)
+        console.log(player.hand)
+        console.log(player.total())
+        document.getElementById(player.spaces[playerPointer]).appendChild(deck.deal(card))
+
+        if (player.total() > 21) {
             e.target.disabled = true;
-            document.getElementById('output').innerText = `Dealer wins!!`
-            // runGame()
-            setTimeout(resetGame, 2000)
-            
-            setTimeout(runGame, 3000)
-            console.log('dealer wins')
+            stayButton.disabled = true;
+            outPut.innerText = 'You busted!!!'
+            // resetGame()
+        } else if (player.total() == 21) {
+            stayButton.disabled = true;
+            outPut.innerText = 'Thats 21 You win!!'
+            // resetGame()
+        } else {
+            playerPointer++
         }
+
     })
 
-    let stay = document.getElementById('stay-button')
-    stay.addEventListener('click', (e) => {
-        hit.disabled = true;
-        console.log(hit)
+    let stayButton = document.getElementById('stay-button')
+    stayButton.addEventListener('click', (e) => {
+        hitButton.disabled = true;
         e.target.disabled = true;
-        // handleStay()
+        dealer.showHiddenCard()
+
+        if (dealer.total() > 16) {
+            if (player.total() > dealer.total()) {
+                outPut.innerText = 'You win!!!'
+                setTimeout(() => resetGame(deck,player, dealer), 2000)            
+            } else if (dealer.total() > player.total()) {
+                outPut.innerText = 'House wins :('
+                setTimeout(() => resetGame(deck,player, dealer), 2000)            
+            } else {
+                outPut.innerText = 'Its a tie.'
+                setTimeout(() => resetGame(deck,player, dealer), 2000)            
+            }
+
+        } else {
+            while (dealer.total() < 17) {
+                let card = deck.deck.pop()
+                dealer.hit(card)
+                document.getElementById(dealer.spaces[dealerPointer]).appendChild(deck.deal(card))
+                dealerPointer++
+            }
+            if (dealer.total() > 21) {
+                outPut.innerText = 'Dealer busts you win!!!'
+                setTimeout(() => resetGame(deck,player, dealer), 2000)            
+            } else {
+                if (player.total() > dealer.total()) {
+                    outPut.innerText = 'You win!!!'
+                    setTimeout(() => resetGame(deck,player, dealer), 2000)                
+                } else if (dealer.total() > player.total()) {
+                    outPut.innerText = 'House wins :('
+                    setTimeout(() => resetGame(deck,player, dealer), 2000)                
+                } else {
+                    outPut.innerText = 'Its a tie.'
+                    setTimeout(() => resetGame(deck,player, dealer), 2000)                }
+            }
+        }
     })
 }
 
-runGame()
 
+let player = new Player()
 
+let dealer = new Dealer()
 
-// while (true) {
-//     if (dealerWins) {
-//         alert('dealer wins')
-//         break
-//     } 
-// }
+let gameDeck = new Deck()
+
+runGame(gameDeck, player, dealer)
