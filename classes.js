@@ -57,16 +57,19 @@ export class Deck {
 
 
 // Create Player class
-
 export class Player {
-    constructor () {
+    constructor (money) {
         this.hand = [];
-        this.spaces = ['player-3', 'player-4', 'player-5']
-        this.cash = 0
+        this.spaces = ['player-3', 'player-4', 'player-5', 'player-6']
+        this.cash = money
     }
 
     addMoney (money) {
         this.cash += money;
+    }
+
+    subtractMoney (money) {
+        this.cash -= money;
     }
 
     // hasBetterHand (opp) {
@@ -81,6 +84,7 @@ export class Player {
 
     hit (card) {
         this.hand.push(card)
+        document.getElementById('player-info').innerText = this.total()
     }
 
     total () {
@@ -91,11 +95,6 @@ export class Player {
         this.hand = [];
     }
 
-    clearTable () {
-        for (let space of this.spaces) {
-            document.getElementById(space).removeChild()
-        }
-    }
 }
 
 
@@ -104,13 +103,17 @@ export class Player {
 export class Dealer extends Player {
     constructor (name) {
         super(name)
-        this.spaces = ['dealer-3', 'dealer-4', 'dealer-5']
+        this.spaces = ['dealer-3', 'dealer-4', 'dealer-5', 'dealer-6']
     }
 
     showHiddenCard () {
         let child = document.getElementById('flippedCard')
         document.getElementById('dealer-1').removeChild(child)
         document.getElementById('dealer-1').appendChild(this.hand[0].createElement())
+    }
+
+    hit (card) {
+        this.hand.push(card)
     }
 }
 

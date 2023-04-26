@@ -1,44 +1,54 @@
 import {Card, Deck, Player, Dealer} from './classes.js'
 
-const dealInitial = (deck, player, dealer) => {
+const dealInitial = async (deck, player, dealer) => {
     // shuffle the deck that's passed in
     deck.shuffle()
     // get a card from the top of the deck and add it to the dealers hand
     // display a facedown card
-    let faceDownCard = deck.deck.pop()
-    dealer.hit(faceDownCard)
-    let d1 = document.getElementById('dealer-1')
-    d1.innerHTML = ''
-    d1.appendChild(deck.flippeCard())
+    setTimeout( () => {
+        let faceDownCard = deck.deck.pop()
+        dealer.hit(faceDownCard)
+        let d1 = document.getElementById('dealer-1')
+        d1.innerHTML = ''
+        d1.appendChild(deck.flippeCard())
+    }, 1000)
     
     // get a card from the top of the deck and add it to the players hand and display it on the screen
-    let playerCard1 = deck.deck.pop()
-    player.hit(playerCard1)
-    let p1 = document.getElementById('player-1')
-    p1.innerHTML = ''
-    p1.appendChild(deck.deal(playerCard1))
+    setTimeout( () => {
+        let playerCard1 = deck.deck.pop()
+        player.hit(playerCard1)
+        let p1 = document.getElementById('player-1')
+        p1.innerHTML = ''
+        p1.appendChild(deck.deal(playerCard1))
+    }, 2000)
     
     // get a card from the top of the deck and add it to the dealers hand and display it on screen
-    let dealerCard2 = deck.deck.pop()
-    dealer.hit(dealerCard2)
-    let d2 = document.getElementById('dealer-2')
-    d2.innerHTML = ''
-    d2.appendChild(deck.deal(dealerCard2))
+    setTimeout( () => {
+        let dealerCard2 = deck.deck.pop()
+        dealer.hit(dealerCard2)
+        let d2 = document.getElementById('dealer-2')
+        d2.innerHTML = ''
+        d2.appendChild(deck.deal(dealerCard2))
+    }, 3000 )
 
     // get a card from the top of the deck and add it to the players hand and display it on the screen
-    let playerCard2 = deck.deck.pop()
-    player.hit(playerCard2)
-    let p2 = document.getElementById('player-2')
-    p2.innerHTML = ''
-    p2.appendChild(deck.deal(playerCard2))
+    setTimeout( () => {
+        let playerCard2 = deck.deck.pop()
+        player.hit(playerCard2)
+        let p2 = document.getElementById('player-2')
+        p2.innerHTML = ''
+        p2.appendChild(deck.deal(playerCard2))
 
+    }, 4000 )
 }
 
 
-const runGame = (deck, player, dealer) => {
+const runGame = async (deck, player, dealer) => {
 
     // deals the first two cards for the dealer and player and updates those objects
-    dealInitial(deck, player, dealer)
+    await dealInitial(deck, player, dealer)
+
+    document.getElementById('wallet').innerText = `Wallet: ${player.cash}`
 
     // select the buttons and output box
     let hitButton = document.getElementById('hit-button')
@@ -47,15 +57,6 @@ const runGame = (deck, player, dealer) => {
     // initialize pointers for the hit functionality
     let dealerPointer = 0
     let playerPointer = 0
-
-    // check if either player or dealer has black jack and reset the game if so
-    if (player.total() == 21) {
-        outPut.innerText = 'Blackjack!!!'
-        setTimeout(resetGame, 2000)
-    } else if (dealer.total() == 21) {
-        outPut.innerText = 'Dealer Blackjack :('
-        setTimeout(resetGame, 2000)
-    }
 
     // reset game function
     const resetGame = () => {
@@ -72,7 +73,8 @@ const runGame = (deck, player, dealer) => {
         }
         
         // clear the output box
-        outPut.innerText = ''
+        outPut.innerText = '';
+        document.getElementById('player-info').innerText = '';
 
         // remove eventListeners form the buttons
         hitButton.removeEventListener('click', handleHit)
@@ -93,12 +95,13 @@ const runGame = (deck, player, dealer) => {
         document.getElementById(player.spaces[playerPointer]).appendChild(deck.deal(card))
     
         // handle player bust / blackjack. else increase pointer for where the next card will be placed
-        if (player.total() > 21) {
+        if (player.busted()) {
             e.target.disabled = true;
             stayButton.disabled = true;
             outPut.innerText = 'You busted!!!'
             setTimeout(resetGame, 2000) 
         } else if (player.total() == 21) {
+            e.target.disabled = true;
             stayButton.disabled = true;
             outPut.innerText = 'Thats 21 You win!!'
             setTimeout(resetGame, 2000)
@@ -137,7 +140,7 @@ const runGame = (deck, player, dealer) => {
                 dealerPointer++
             }
             // if dealer busts announce player wins and reset the game
-            if (dealer.total() > 21) {
+            if (dealer.busted()) {
                 outPut.innerText = 'Dealer busts you win!!!'
                 setTimeout(resetGame, 2000)            
             } else {
@@ -156,15 +159,33 @@ const runGame = (deck, player, dealer) => {
         }
     }
 
+    // check if either player or dealer has black jack and reset the game if so
+    setTimeout( () => {
+        if (player.total() == 21) {
+            outPut.innerText = 'Blackjack!!!'
+            setTimeout(resetGame, 2000)
+        } else if (dealer.total() == 21) {
+            outPut.innerText = 'Dealer Blackjack :('
+            setTimeout(resetGame, 2000)
+        }
+    }, 4500)
+    
+
     // add the handleHit function to the hit button
-    hitButton.addEventListener('click', handleHit)
+    setTimeout(() => {
+        hitButton.addEventListener('click', handleHit)
+    }, 5000)
+    
     // add the handleStay function to the stay button
-    stayButton.addEventListener('click', handleStay)
+    setTimeout(() => {
+        stayButton.addEventListener('click', handleStay)
+    }, 5000)
+    
 
 }
 
 // initialize new player object
-let player = new Player()
+let player = new Player(1000)
 // initialize new dealer object
 let dealer = new Dealer()
 // initialize new deck object
