@@ -128,25 +128,51 @@ const dealInitial = (deck, player, dealer) => {
     p2.appendChild(deck.deal(playerCard2))
 }
 
+
 const runGame = (deck, player, dealer) => {
     dealInitial(deck, player, dealer)
+    let hitButton = document.getElementById('hit-button')
+    let stayButton = document.getElementById('stay-button')
     let outPut = document.getElementById('output')
-    console.log('dealer: ' + dealer.total())
-    console.log('player: ' + player.total())
-    console.log(player.hand)
     let dealerPointer = 0
     let playerPointer = 0
 
-    let hitButton = document.getElementById('hit-button')
+    if (player.total() == 21) {
+        outPut.innerText = 'Blackjack!!!'
+        setTimeout(resetGame, 2000)
+    } else if (dealer.total() == 21) {
+        outPut.innerText = 'Dealer Blackjack :('
+        setTimeout(resetGame, 2000)
+    }
 
-    let stayButton = document.getElementById('stay-button')
+
+    const resetGame = () => {
+        let generated = document.querySelectorAll('.generated')
+        for (let element of generated) {
+            element.remove()
+        }
+
+        let buttons = document.querySelectorAll('.button')
+        for (let element of buttons) {
+            element.disabled = false;
+        }
+        
+        outPut.innerText = ''
+
+        hitButton.removeEventListener('click', handleHit)
+        stayButton.removeEventListener('click', handleStay)
+
+        player.clearHand()
+        dealer.clearHand()
+
+        runGame(deck, player, dealer)
+    }
+
     const handleHit = (e) => {
         let card = deck.deck.pop()
         player.hit(card)
-        console.log(player.hand)
-        console.log(player.total())
         document.getElementById(player.spaces[playerPointer]).appendChild(deck.deal(card))
-
+    
         if (player.total() > 21) {
             e.target.disabled = true;
             stayButton.disabled = true;
@@ -159,9 +185,9 @@ const runGame = (deck, player, dealer) => {
         } else {
             playerPointer++
         }
-
+    
     }
-
+    
     const handleStay = (e) => {
         hitButton.disabled = true;
         e.target.disabled = true;
@@ -180,6 +206,7 @@ const runGame = (deck, player, dealer) => {
             }
 
         } else {
+            
             while (dealer.total() < 17) {
                 let card = deck.deck.pop()
                 dealer.hit(card)
@@ -190,6 +217,7 @@ const runGame = (deck, player, dealer) => {
                 outPut.innerText = 'Dealer busts you win!!!'
                 setTimeout(resetGame, 2000)            
             } else {
+                
                 if (player.total() > dealer.total()) {
                     outPut.innerText = 'You win!!!'
                     setTimeout(resetGame, 2000)                
@@ -198,51 +226,16 @@ const runGame = (deck, player, dealer) => {
                     setTimeout(resetGame, 2000)                
                 } else {
                     outPut.innerText = 'Its a tie.'
-                    setTimeout(resetGame, 2000)                }
+                    setTimeout(resetGame, 2000)                
+                }
             }
         }
     }
 
-    hitButton.removeEventListener('click', handleHit)
-
-
-    stayButton.removeEventListener('click', handleStay)
-
-
-    const resetGame = () => {
-        let generated = document.querySelectorAll('.generated')
-        for (let element of generated) {
-            element.remove()
-        }
-        let buttons = document.querySelectorAll('.button')
-        for (let element of buttons) {
-            element.disabled = false;
-        }
-        player.clearHand()
-        dealer.clearHand()
-        outPut.innerText = ''
-
-        runGame(deck, player, dealer)
-    }
-    
-    if (player.total() == 21) {
-        outPut.innerText = 'Blackjack!!!'
-        // resetGame()
-    } else if (dealer.total() == 21) {
-        outPut.innerText = 'Dealer Blackjack :('
-        // resetGame()
-    }
-
-
-
-    
-    
-
-    
     hitButton.addEventListener('click', handleHit)
 
-    
     stayButton.addEventListener('click', handleStay)
+
 }
 
 
