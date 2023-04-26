@@ -129,13 +129,85 @@ const dealInitial = (deck, player, dealer) => {
 }
 
 const runGame = (deck, player, dealer) => {
-    let outPut = document.getElementById('output')
     dealInitial(deck, player, dealer)
+    let outPut = document.getElementById('output')
     console.log('dealer: ' + dealer.total())
     console.log('player: ' + player.total())
     console.log(player.hand)
     let dealerPointer = 0
     let playerPointer = 0
+
+    let hitButton = document.getElementById('hit-button')
+
+    let stayButton = document.getElementById('stay-button')
+    const handleHit = (e) => {
+        let card = deck.deck.pop()
+        player.hit(card)
+        console.log(player.hand)
+        console.log(player.total())
+        document.getElementById(player.spaces[playerPointer]).appendChild(deck.deal(card))
+
+        if (player.total() > 21) {
+            e.target.disabled = true;
+            stayButton.disabled = true;
+            outPut.innerText = 'You busted!!!'
+            setTimeout(resetGame, 2000) 
+        } else if (player.total() == 21) {
+            stayButton.disabled = true;
+            outPut.innerText = 'Thats 21 You win!!'
+            setTimeout(resetGame, 2000)
+        } else {
+            playerPointer++
+        }
+
+    }
+
+    const handleStay = (e) => {
+        hitButton.disabled = true;
+        e.target.disabled = true;
+        dealer.showHiddenCard()
+
+        if (dealer.total() > 16) {
+            if (player.total() > dealer.total()) {
+                outPut.innerText = 'You win!!!'
+                setTimeout(resetGame, 2000)            
+            } else if (dealer.total() > player.total()) {
+                outPut.innerText = 'House wins :('
+                setTimeout(resetGame, 2000)            
+            } else {
+                outPut.innerText = 'Its a tie.'
+                setTimeout(resetGame, 2000)            
+            }
+
+        } else {
+            while (dealer.total() < 17) {
+                let card = deck.deck.pop()
+                dealer.hit(card)
+                document.getElementById(dealer.spaces[dealerPointer]).appendChild(deck.deal(card))
+                dealerPointer++
+            }
+            if (dealer.total() > 21) {
+                outPut.innerText = 'Dealer busts you win!!!'
+                setTimeout(resetGame, 2000)            
+            } else {
+                if (player.total() > dealer.total()) {
+                    outPut.innerText = 'You win!!!'
+                    setTimeout(resetGame, 2000)                
+                } else if (dealer.total() > player.total()) {
+                    outPut.innerText = 'House wins :('
+                    setTimeout(resetGame, 2000)                
+                } else {
+                    outPut.innerText = 'Its a tie.'
+                    setTimeout(resetGame, 2000)                }
+            }
+        }
+    }
+
+    hitButton.removeEventListener('click', handleHit)
+
+
+    stayButton.removeEventListener('click', handleStay)
+
 
     const resetGame = () => {
         let generated = document.querySelectorAll('.generated')
@@ -161,70 +233,16 @@ const runGame = (deck, player, dealer) => {
         // resetGame()
     }
 
-    let hitButton = document.getElementById('hit-button')
-    hitButton.addEventListener('click', (e) => {
-        let card = deck.deck.pop()
-        player.hit(card)
-        console.log(player.hand)
-        console.log(player.total())
-        document.getElementById(player.spaces[playerPointer]).appendChild(deck.deal(card))
 
-        if (player.total() > 21) {
-            e.target.disabled = true;
-            stayButton.disabled = true;
-            outPut.innerText = 'You busted!!!'
-            // resetGame()
-        } else if (player.total() == 21) {
-            stayButton.disabled = true;
-            outPut.innerText = 'Thats 21 You win!!'
-            // resetGame()
-        } else {
-            playerPointer++
-        }
 
-    })
+    
+    
 
-    let stayButton = document.getElementById('stay-button')
-    stayButton.addEventListener('click', (e) => {
-        hitButton.disabled = true;
-        e.target.disabled = true;
-        dealer.showHiddenCard()
+    
+    hitButton.addEventListener('click', handleHit)
 
-        if (dealer.total() > 16) {
-            if (player.total() > dealer.total()) {
-                outPut.innerText = 'You win!!!'
-                setTimeout(() => resetGame(deck,player, dealer), 2000)            
-            } else if (dealer.total() > player.total()) {
-                outPut.innerText = 'House wins :('
-                setTimeout(() => resetGame(deck,player, dealer), 2000)            
-            } else {
-                outPut.innerText = 'Its a tie.'
-                setTimeout(() => resetGame(deck,player, dealer), 2000)            
-            }
-
-        } else {
-            while (dealer.total() < 17) {
-                let card = deck.deck.pop()
-                dealer.hit(card)
-                document.getElementById(dealer.spaces[dealerPointer]).appendChild(deck.deal(card))
-                dealerPointer++
-            }
-            if (dealer.total() > 21) {
-                outPut.innerText = 'Dealer busts you win!!!'
-                setTimeout(() => resetGame(deck,player, dealer), 2000)            
-            } else {
-                if (player.total() > dealer.total()) {
-                    outPut.innerText = 'You win!!!'
-                    setTimeout(() => resetGame(deck,player, dealer), 2000)                
-                } else if (dealer.total() > player.total()) {
-                    outPut.innerText = 'House wins :('
-                    setTimeout(() => resetGame(deck,player, dealer), 2000)                
-                } else {
-                    outPut.innerText = 'Its a tie.'
-                    setTimeout(() => resetGame(deck,player, dealer), 2000)                }
-            }
-        }
-    })
+    
+    stayButton.addEventListener('click', handleStay)
 }
 
 
