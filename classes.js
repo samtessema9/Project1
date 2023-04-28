@@ -77,14 +77,8 @@ export class Player {
         this.cash -= money;
     }
 
-    // hasBetterHand (opp) {
-    //     let myHand = this.hand.reduce((acc, card) => acc + card.value, 0)
-    //     let opponentHand = opp.hand.reduce((acc, card) => acc + card.value, 0)
-    //     return myHand > opponentHand;
-    // }
-
     busted () {
-        return this.hand.reduce((acc, card) => acc + card.value, 0) > 21
+        return this.total() > 21
     }
 
     hit (card) {
@@ -93,7 +87,27 @@ export class Player {
     }
 
     total () {
-        return this.hand.reduce((acc, card) => acc + card.value, 0)
+        let sum = 0
+        for (let card of this.hand) {
+            if (card.name == 'A' && (sum + 11) > 21) {
+                sum += 1
+            } else (
+                sum += card.value
+            )
+        }
+
+        if (sum > 21) {
+            for (let card of this.hand) {
+                if (card.value == 'A') {
+                    sum -= 10
+                    return sum
+                }
+            }
+        }
+        
+        return sum
+
+        // return this.hand.reduce((acc, card) => acc + card.value, 0)
     }
 
     clearHand () {

@@ -43,16 +43,15 @@ const dealInitial = async (deck, player, dealer) => {
 }
 
 
-const runGame = async (deck, player, dealer, cash) => {
-
+const runGame = async (deck, player, dealer, bet) => {
+    // disable the deal button
     document.getElementById('deal-button').disabled = true;
-
-    player.subtractMoney(cash)
-    
+    // subtract bet amount from total and display total
+    player.subtractMoney(bet)
     document.getElementById('wallet').innerText = `Wallet: ${player.cash}`
-
+    // display the bet amount in the chip div
     let chips = document.getElementById('chips')
-    chips.innerText = cash
+    chips.innerText = bet
 
     // deals the first two cards for the dealer and player and updates those objects
     await dealInitial(deck, player, dealer)
@@ -97,21 +96,21 @@ const runGame = async (deck, player, dealer, cash) => {
     }
 
     const playerBlackJack = () => {
-        let winnings = (cash * 1.5) + cash
+        let winnings = (bet * 1.5) + bet
         player.addMoney(winnings)
         chips.innerText = winnings
         document.getElementById('wallet').innerText = `Wallet: ${player.cash}`
     }
 
     const playerWins = () => {
-        let winnings = cash * 2
+        let winnings = bet * 2
         player.addMoney(winnings)
         chips.innerText = winnings
         document.getElementById('wallet').innerText = `Wallet: ${player.cash}`
     }
 
     const handleTie = () => {
-        let winnings = cash
+        let winnings = bet
         player.addMoney(winnings)
         document.getElementById('wallet').innerText = `Wallet: ${player.cash}`
     }
@@ -128,7 +127,7 @@ const runGame = async (deck, player, dealer, cash) => {
         document.getElementById(player.spaces[playerPointer]).appendChild(deck.deal(card))
     
         // handle player bust / blackjack. else increase pointer for where the next card will be placed
-        if (player.busted()) {
+        if (player.total() > 21) {
             e.target.disabled = true;
             stayButton.disabled = true;
             outPut.innerText = 'You busted!!!'
@@ -184,7 +183,7 @@ const runGame = async (deck, player, dealer, cash) => {
                 dealerPointer++
             }
             // if dealer busts announce player wins and reset the game
-            if (dealer.busted()) {
+            if (dealer.total() > 21) {
                 outPut.innerText = 'Dealer busts you win!!!'
                 playerWins()
                 setTimeout(resetGame, 2000)            
@@ -231,7 +230,6 @@ const runGame = async (deck, player, dealer, cash) => {
         stayButton.addEventListener('click', handleStay)
     }, 5000)
     
-    
 }
 
 // initialize new player object
@@ -247,18 +245,16 @@ let inputBet = document.getElementById('enter-bet')
 let dealButton = document.getElementById('deal-button')
 let chips = document.getElementById('chips')
 
+// Add an event listener to the deal button that will run the game
 dealButton.addEventListener('click', () => {
     document.getElementById('prompt').innerText = '';
     chips.innerText = ''
-    let cash = parseFloat(inputBet.value)
-    if (cash <= player.cash) {
-        runGame(gameDeck, player, dealer, cash)
+    let bet = parseFloat(inputBet.value)
+    if (bet <= player.cash) {
+        runGame(gameDeck, player, dealer, bet)
     } else {
         document.getElementById('prompt').innerText = 'You do not have enough cash try again.';
     }
     inputBet.value = ''
 })
 
-
-// call runGame with the above three objects as params
-// runGame(gameDeck, player, dealer)
