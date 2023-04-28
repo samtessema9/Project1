@@ -59,10 +59,17 @@ const runGame = async (deck, player, dealer, bet) => {
     // select the buttons and output box
     let hitButton = document.getElementById('hit-button')
     let stayButton = document.getElementById('stay-button')
+    let doubleButton = document.getElementById('double-button')
+    doubleButton.disabled = false;
     let outPut = document.getElementById('output')
     // initialize pointers for the hit functionality
     let dealerPointer = 0
     let playerPointer = 0
+
+    // define a function that pauses code execution
+    const sleep = (ms) => {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
 
     // reset game function
     const resetGame = () => {
@@ -86,6 +93,7 @@ const runGame = async (deck, player, dealer, bet) => {
         // remove eventListeners form the buttons
         hitButton.removeEventListener('click', handleHit)
         stayButton.removeEventListener('click', handleStay)
+        doubleButton.removeEventListener('click', handleDouble)
 
         // clear the player and dealers hands
         player.clearHand()
@@ -132,24 +140,29 @@ const runGame = async (deck, player, dealer, bet) => {
             stayButton.disabled = true;
             outPut.innerText = 'You busted!!!'
             handleLoss()
-            setTimeout(resetGame, 2000) 
+            setTimeout(resetGame, 4000) 
         } else if (player.total() == 21) {
             e.target.disabled = true;
             stayButton.disabled = true;
             outPut.innerText = 'Thats 21 You win!!'
             playerWins()
-            setTimeout(resetGame, 2000)
+            setTimeout(resetGame, 4000)
         } else {
             playerPointer++
         }
     
     }
     
-    const handleStay = async (e) => {
+    const handleStay = async () => {
         // disable all the buttons and show the dealers facedown card
         hitButton.disabled = true;
-        e.target.disabled = true;
+        stayButton.disabled = true;
+
+        await sleep(500)
+
         dealer.showHiddenCard()
+
+        await sleep(1000)
 
         // if the dealer has a 17 or higher compare dealers total to players total and announce the winner or a tie 
         // reset the game
@@ -157,28 +170,23 @@ const runGame = async (deck, player, dealer, bet) => {
             if (player.total() > dealer.total()) {
                 outPut.innerText = 'You win!!!'
                 playerWins()
-                setTimeout(resetGame, 2000)            
+                setTimeout(resetGame, 4000)            
             } else if (dealer.total() > player.total()) {
                 outPut.innerText = 'House wins :('
                 handleLoss()
-                setTimeout(resetGame, 2000)            
+                setTimeout(resetGame, 4000)            
             } else {
                 outPut.innerText = 'Its a tie.'
                 handleTie()
-                setTimeout(resetGame, 2000)            
+                setTimeout(resetGame, 4000)            
             }
 
         } else {
-            // define a function that pauses code execution
-            const sleep = (ms) => {
-                return new Promise(resolve => setTimeout(resolve, ms));
-            }
-            
             // while the dealer has less than 17 hit the dealer and increment pointer for the dealers next card
             while (dealer.total() < 17) {
                 let card = deck.deck.pop()
                 dealer.hit(card)
-                await sleep(1500)
+                await sleep(2000)
                 document.getElementById(dealer.spaces[dealerPointer]).appendChild(deck.deal(card))
                 dealerPointer++
             }
@@ -186,24 +194,57 @@ const runGame = async (deck, player, dealer, bet) => {
             if (dealer.total() > 21) {
                 outPut.innerText = 'Dealer busts you win!!!'
                 playerWins()
-                setTimeout(resetGame, 2000)            
+                setTimeout(resetGame, 4000)            
             } else {
                 // compare the dealers tota to the players total and announce the winner or a tie
                 if (player.total() > dealer.total()) {
                     outPut.innerText = 'You win!!!'
                     playerWins()
-                    setTimeout(resetGame, 2000)                
+                    setTimeout(resetGame, 4000)                
                 } else if (dealer.total() > player.total()) {
                     outPut.innerText = 'House wins :('
                     handleLoss()
-                    setTimeout(resetGame, 2000)                
+                    setTimeout(resetGame, 4000)                
                 } else {
                     outPut.innerText = 'Its a tie.'
                     handleTie()
-                    setTimeout(resetGame, 2000)                
+                    setTimeout(resetGame, 4000)                
                 }
             }
         }
+    }
+
+    const handleDouble = async (e) => {
+        // disable all the buttons
+        doubleButton.disabled = true;
+        hitButton.disabled = true;
+        stayButton.disabled = true;
+        // double the bet and subtract from player wallet
+        bet *= 2
+        player.subtractMoney(bet)
+        // update the chips and wallet amount
+        chips.innerText = bet
+        document.getElementById('wallet').innerText = `Wallet: ${player.cash}`
+        // take card from top of the deck
+        let card = deck.deck.pop()
+
+        await sleep(1500)
+
+        player.hit(card)
+        document.getElementById(player.spaces[playerPointer]).appendChild(deck.deal(card))
+
+        if (player.total() > 21) {
+            outPut.innerText = 'You busted!!!'
+            handleLoss()
+            setTimeout(resetGame, 4000) 
+        } else if (player.total() == 21) {
+            outPut.innerText = 'Thats 21 You win!!'
+            playerWins()
+            setTimeout(resetGame, 4000) 
+        } else {
+            handleStay()
+        }
+        
     }
 
     // check if either player or dealer has black jack and reset the game if so
@@ -211,11 +252,12 @@ const runGame = async (deck, player, dealer, bet) => {
         if (player.total() == 21) {
             outPut.innerText = 'Blackjack!!!'
             playerBlackJack()
-            setTimeout(resetGame, 2000)
+            setTimeout(resetGame, 4000)
         } else if (dealer.total() == 21) {
             outPut.innerText = 'Dealer Blackjack :('
+            dealer.showHiddenCard()
             handleLoss()
-            setTimeout(resetGame, 2000)
+            setTimeout(resetGame, 4000)
         }
     }, 4500)
     
@@ -228,6 +270,10 @@ const runGame = async (deck, player, dealer, bet) => {
     // add the handleStay function to the stay button
     setTimeout(() => {
         stayButton.addEventListener('click', handleStay)
+    }, 5000)
+
+    setTimeout(() => {
+        doubleButton.addEventListener('click', handleDouble)
     }, 5000)
     
 }

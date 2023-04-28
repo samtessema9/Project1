@@ -43,7 +43,6 @@ body {
     display: flex;
     flex-direction: column;
     grid-area: 4 / 5 / span 1/ span 2; 
-    /* border: solid 1px red; */
     text-align: center;
     justify-content: center;
     
@@ -90,8 +89,6 @@ button {
 
 #bet {
     grid-area: 8 / 2 / span 1 / span 2;
-    /* margin-right: 100px; */
-    /* border: solid 2px red; */
     border-radius: 10px;
     display: flex;
     width: 100%;
