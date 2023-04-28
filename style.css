@@ -2,7 +2,7 @@
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
     font-size: 30px;
     font-weight: 600;
-    color: #c8471d;
+    color: black;
 }
 
 body {
@@ -81,6 +81,11 @@ button {
 
 #prompt {
     grid-area: 7 / 2 / span 1 / span 2;
+    display: flex;
+    align-items: flex-end;
+    padding-bottom: 20px;
+    justify-content: center;
+    color: azure;
 }
 
 #bet {
@@ -101,7 +106,7 @@ button {
 
 #bet button {
     background-color: rgb(51, 98, 186);
-    color: rgb(197, 193, 185);
+    color: azure;
     height: 70%;
     border-radius: 10px;
 }
@@ -114,7 +119,7 @@ button {
     color: white;
     font-size: 30px;
     font-weight: 800;
-    text-align: center;
     display: flex;
     justify-content: center;
+    align-items: center;
 }

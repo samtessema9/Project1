@@ -45,6 +45,8 @@ const dealInitial = async (deck, player, dealer) => {
 
 const runGame = async (deck, player, dealer, cash) => {
 
+    console.log(deck.deck.length)
+
     player.subtractMoney(cash)
     
     document.getElementById('wallet').innerText = `Wallet: ${player.cash}`
@@ -144,7 +146,7 @@ const runGame = async (deck, player, dealer, cash) => {
     
     }
     
-    const handleStay = (e) => {
+    const handleStay = async (e) => {
         // disable all the buttons and show the dealers facedown card
         hitButton.disabled = true;
         e.target.disabled = true;
@@ -168,10 +170,16 @@ const runGame = async (deck, player, dealer, cash) => {
             }
 
         } else {
+            // define a function that pauses code execution
+            const sleep = (ms) => {
+                return new Promise(resolve => setTimeout(resolve, ms));
+            }
+            
             // while the dealer has less than 17 hit the dealer and increment pointer for the dealers next card
             while (dealer.total() < 17) {
                 let card = deck.deck.pop()
                 dealer.hit(card)
+                await sleep(1500)
                 document.getElementById(dealer.spaces[dealerPointer]).appendChild(deck.deal(card))
                 dealerPointer++
             }
@@ -232,6 +240,7 @@ let player = new Player(1000)
 let dealer = new Dealer()
 // initialize new deck object
 let gameDeck = new Deck()
+gameDeck.multiply()
 
 
 let inputBet = document.getElementById('enter-bet')
@@ -241,7 +250,7 @@ let chips = document.getElementById('chips')
 dealButton.addEventListener('click', () => {
     document.getElementById('prompt').innerText = '';
     chips.innerText = ''
-    let cash = parseInt(inputBet.value)
+    let cash = parseFloat(inputBet.value)
     runGame(gameDeck, player, dealer, cash)
     inputBet.value = ''
 })

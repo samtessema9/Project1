@@ -32,10 +32,15 @@ export class Deck {
             }
         }
     }
+    
+    multiply () {
+        this.deck = [...this.deck, ...this.deck, ...this.deck];
+    }
 
     shuffle () {
         this.deck = this.deck.sort((a, b) => 0.5 - Math.random())
     }
+
 
     deal (card) {
         // let card = this.deck.pop();
