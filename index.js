@@ -45,7 +45,7 @@ const dealInitial = async (deck, player, dealer) => {
 
 const runGame = async (deck, player, dealer, cash) => {
 
-    console.log(deck.deck.length)
+    document.getElementById('deal-button').disabled = true;
 
     player.subtractMoney(cash)
     
@@ -93,7 +93,7 @@ const runGame = async (deck, player, dealer, cash) => {
         dealer.clearHand()
 
         // start the game over
-        // runGame(deck, player, dealer)
+        document.getElementById('deal-button').disabled = false;
     }
 
     const playerBlackJack = () => {
@@ -251,7 +251,11 @@ dealButton.addEventListener('click', () => {
     document.getElementById('prompt').innerText = '';
     chips.innerText = ''
     let cash = parseFloat(inputBet.value)
-    runGame(gameDeck, player, dealer, cash)
+    if (cash <= player.cash) {
+        runGame(gameDeck, player, dealer, cash)
+    } else {
+        document.getElementById('prompt').innerText = 'You do not have enough cash try again.';
+    }
     inputBet.value = ''
 })
 
