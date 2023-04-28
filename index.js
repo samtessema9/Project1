@@ -43,12 +43,17 @@ const dealInitial = async (deck, player, dealer) => {
 }
 
 
-const runGame = async (deck, player, dealer) => {
+const runGame = async (deck, player, dealer, cash) => {
+
+    player.subtractMoney(cash)
+    
+    document.getElementById('wallet').innerText = `Wallet: ${player.cash}`
+
+    let chips = document.getElementById('chips')
+    chips.innerText = cash
 
     // deals the first two cards for the dealer and player and updates those objects
     await dealInitial(deck, player, dealer)
-
-    document.getElementById('wallet').innerText = `Wallet: ${player.cash}`
 
     // select the buttons and output box
     let hitButton = document.getElementById('hit-button')
@@ -72,8 +77,9 @@ const runGame = async (deck, player, dealer) => {
             element.disabled = false;
         }
         
-        // clear the output box
+        // clear the output box and the chips
         outPut.innerText = '';
+        chips.innerText = '';
         document.getElementById('player-info').innerText = '';
 
         // remove eventListeners form the buttons
@@ -85,7 +91,32 @@ const runGame = async (deck, player, dealer) => {
         dealer.clearHand()
 
         // start the game over
-        runGame(deck, player, dealer)
+        // runGame(deck, player, dealer)
+    }
+
+    const playerBlackJack = () => {
+        let winnings = (cash * 1.5) + cash
+        player.addMoney(winnings)
+        chips.innerText = winnings
+        document.getElementById('wallet').innerText = `Wallet: ${player.cash}`
+    }
+
+    const playerWins = () => {
+        let winnings = cash * 2
+        player.addMoney(winnings)
+        chips.innerText = winnings
+        document.getElementById('wallet').innerText = `Wallet: ${player.cash}`
+    }
+
+    const handleTie = () => {
+        let winnings = cash
+        player.addMoney(winnings)
+        document.getElementById('wallet').innerText = `Wallet: ${player.cash}`
+    }
+
+    const handleLoss = () => {
+        chips.innerText = 0
+        document.getElementById('wallet').innerText = `Wallet: ${player.cash}`
     }
 
     const handleHit = (e) => {
@@ -99,11 +130,13 @@ const runGame = async (deck, player, dealer) => {
             e.target.disabled = true;
             stayButton.disabled = true;
             outPut.innerText = 'You busted!!!'
+            handleLoss()
             setTimeout(resetGame, 2000) 
         } else if (player.total() == 21) {
             e.target.disabled = true;
             stayButton.disabled = true;
             outPut.innerText = 'Thats 21 You win!!'
+            playerWins()
             setTimeout(resetGame, 2000)
         } else {
             playerPointer++
@@ -122,12 +155,15 @@ const runGame = async (deck, player, dealer) => {
         if (dealer.total() > 16) {
             if (player.total() > dealer.total()) {
                 outPut.innerText = 'You win!!!'
+                playerWins()
                 setTimeout(resetGame, 2000)            
             } else if (dealer.total() > player.total()) {
                 outPut.innerText = 'House wins :('
+                handleLoss()
                 setTimeout(resetGame, 2000)            
             } else {
                 outPut.innerText = 'Its a tie.'
+                handleTie()
                 setTimeout(resetGame, 2000)            
             }
 
@@ -142,17 +178,21 @@ const runGame = async (deck, player, dealer) => {
             // if dealer busts announce player wins and reset the game
             if (dealer.busted()) {
                 outPut.innerText = 'Dealer busts you win!!!'
+                playerWins()
                 setTimeout(resetGame, 2000)            
             } else {
                 // compare the dealers tota to the players total and announce the winner or a tie
                 if (player.total() > dealer.total()) {
                     outPut.innerText = 'You win!!!'
+                    playerWins()
                     setTimeout(resetGame, 2000)                
                 } else if (dealer.total() > player.total()) {
                     outPut.innerText = 'House wins :('
+                    handleLoss()
                     setTimeout(resetGame, 2000)                
                 } else {
                     outPut.innerText = 'Its a tie.'
+                    handleTie()
                     setTimeout(resetGame, 2000)                
                 }
             }
@@ -163,9 +203,11 @@ const runGame = async (deck, player, dealer) => {
     setTimeout( () => {
         if (player.total() == 21) {
             outPut.innerText = 'Blackjack!!!'
+            playerBlackJack()
             setTimeout(resetGame, 2000)
         } else if (dealer.total() == 21) {
             outPut.innerText = 'Dealer Blackjack :('
+            handleLoss()
             setTimeout(resetGame, 2000)
         }
     }, 4500)
@@ -181,7 +223,7 @@ const runGame = async (deck, player, dealer) => {
         stayButton.addEventListener('click', handleStay)
     }, 5000)
     
-
+    
 }
 
 // initialize new player object
@@ -191,5 +233,19 @@ let dealer = new Dealer()
 // initialize new deck object
 let gameDeck = new Deck()
 
+
+let inputBet = document.getElementById('enter-bet')
+let dealButton = document.getElementById('deal-button')
+let chips = document.getElementById('chips')
+
+dealButton.addEventListener('click', () => {
+    document.getElementById('prompt').innerText = '';
+    chips.innerText = ''
+    let cash = parseInt(inputBet.value)
+    runGame(gameDeck, player, dealer, cash)
+    inputBet.value = ''
+})
+
+
 // call runGame with the above three objects as params
-runGame(gameDeck, player, dealer)
+// runGame(gameDeck, player, dealer)
