@@ -60,8 +60,8 @@ const runGame = async (deck, player, dealer, bet) => {
     let hitButton = document.getElementById('hit-button')
     let stayButton = document.getElementById('stay-button')
     let doubleButton = document.getElementById('double-button')
-    doubleButton.disabled = false;
     let outPut = document.getElementById('output')
+
     // initialize pointers for the hit functionality
     let dealerPointer = 0
     let playerPointer = 0
@@ -71,7 +71,6 @@ const runGame = async (deck, player, dealer, bet) => {
         return new Promise(resolve => setTimeout(resolve, ms));
     }
 
-    // reset game function
     const resetGame = () => {
         // clear all generated cards from screen
         let generated = document.querySelectorAll('.generated')
@@ -98,6 +97,11 @@ const runGame = async (deck, player, dealer, bet) => {
         // clear the player and dealers hands
         player.clearHand()
         dealer.clearHand()
+
+        // calculate and display the true count
+        let displayTrueCount = document.getElementById('trueCount');
+        let trueCount = (Deck.cardCount / (deck.deck.length /  52)).toFixed(2)
+        displayTrueCount.innerText = `trueCount: ${trueCount}`
 
         // start the game over
         document.getElementById('deal-button').disabled = false;
@@ -216,10 +220,17 @@ const runGame = async (deck, player, dealer, bet) => {
     }
 
     const handleDouble = async (e) => {
+        // Check if player has enough money to double
+        if (player.cash < bet) {
+            outPut.innerText = 'You do not have enough money to double!';
+            return
+        }
+
         // disable all the buttons
         doubleButton.disabled = true;
         hitButton.disabled = true;
         stayButton.disabled = true;
+
         // double the bet and subtract from player wallet
         bet *= 2
         player.subtractMoney(bet)
@@ -230,7 +241,7 @@ const runGame = async (deck, player, dealer, bet) => {
         let card = deck.deck.pop()
 
         await sleep(1500)
-
+        // deal player a card
         player.hit(card)
         document.getElementById(player.spaces[playerPointer]).appendChild(deck.deal(card))
 
@@ -303,5 +314,16 @@ dealButton.addEventListener('click', () => {
         document.getElementById('prompt').innerText = 'You do not have enough cash try again.';
     }
     inputBet.value = ''
+
+    
 })
+
+document.getElementById('toggle-help').addEventListener('click', () => {
+    if (document.getElementById('cardCount').style.display == 'none') {
+        document.getElementById('cardCount').style.display = 'flex'
+    } else {
+        document.getElementById('cardCount').style.display = 'none'
+    }
+})
+
 

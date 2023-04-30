@@ -128,3 +128,23 @@ button:hover {
     justify-content: center;
     align-items: center;
 }
+
+#help {
+    grid-area: 3 / 11 / span 1/ span 1;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+}
+
+#help button {
+    width: 50%;
+    height: 30%;
+    background-color: goldenrod;
+}
+
+#cardCount {
+    grid-area: 4 / 11 / span 1/ span 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+}

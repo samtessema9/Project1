@@ -19,6 +19,9 @@ export class Deck {
 
     static cardCount = 0;
 
+    count = document.getElementById('count');
+    trueCount = document.getElementById('trueCount');
+
     constructor () {
         const names = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
         const suits = ['spades', 'clubs', 'diamonds', 'hearts'];
@@ -48,7 +51,7 @@ export class Deck {
     deal (card) {
         if (card.value < 7) Deck.cardCount++;
         else if (card.value > 9) Deck.cardCount--;
-        console.log(Deck.cardCount)
+        this.count.innerText = `Count: ${Deck.cardCount}`
 
         return card.createElement();
     }
@@ -129,12 +132,16 @@ export class Dealer extends Player {
     }
 
     showHiddenCard () {
+        // display hidden card
         let child = document.getElementById('flippedCard')
         document.getElementById('dealer-1').removeChild(child)
         document.getElementById('dealer-1').appendChild(this.hand[0].createElement())
+
+        // update count
         if (this.hand[0].value < 7) Deck.cardCount++;
         else if (this.hand[0].value > 9) Deck.cardCount--;
-        console.log(Deck.cardCount)
+        let count = document.getElementById('count');
+        count.innerText = `Count: ${Deck.cardCount}`
     }
 
     hit (card) {
