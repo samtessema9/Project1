@@ -1,6 +1,6 @@
 * {
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
-    font-size: 30px;
+    font-size: 50px;
     font-weight: 600;
     color: black;
 }
@@ -73,9 +73,14 @@ body {
 }
 
 button {
-    width: 100%;
+    width: 90%;
     height: 70%;
     border-radius: 10px;
+}
+
+button:hover {
+    cursor: pointer;
+    transform: scale(1.05);
 }
 
 #prompt {
@@ -96,25 +101,28 @@ button {
 }
 
 #bet input {
-    width: 100px;
+    width: 30%;
     height: 65%;
     border-radius: 10px;
+    margin-right: 20px;
 }
 
 #bet button {
     background-color: rgb(51, 98, 186);
     color: azure;
     height: 70%;
+    width: 60%;
     border-radius: 10px;
 }
 
 #chips {
     grid-area: 4 / 2 / span 1/ span 1;
-    width: 100px;
+    width: 150px;
+    height: 150px;
     border: dashed 7px salmon;
     border-radius: 50%;
     color: white;
-    font-size: 30px;
+    font-size: 50px;
     font-weight: 800;
     display: flex;
     justify-content: center;
