@@ -157,12 +157,13 @@ const runGame = async (deck, player, dealer, bet) => {
         // disable all the buttons and show the dealers facedown card
         hitButton.disabled = true;
         stayButton.disabled = true;
+        doubleButton.disabled = true;
 
         await sleep(500)
 
         dealer.showHiddenCard()
 
-        await sleep(1000)
+        await sleep(500)
 
         // if the dealer has a 17 or higher compare dealers total to players total and announce the winner or a tie 
         // reset the game

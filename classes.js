@@ -16,6 +16,9 @@ export class Card {
 
 // Create a deck class
 export class Deck {
+
+    static cardCount = 0;
+
     constructor () {
         const names = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
         const suits = ['spades', 'clubs', 'diamonds', 'hearts'];
@@ -34,7 +37,7 @@ export class Deck {
     }
     
     multiply () {
-        this.deck = [...this.deck, ...this.deck, ...this.deck];
+        this.deck = [...this.deck, ...this.deck, ...this.deck, ...this.deck, ...this.deck, ...this.deck];
     }
 
     shuffle () {
@@ -43,7 +46,10 @@ export class Deck {
 
 
     deal (card) {
-        // let card = this.deck.pop();
+        if (card.value < 7) Deck.cardCount++;
+        else if (card.value > 9) Deck.cardCount--;
+        console.log(Deck.cardCount)
+
         return card.createElement();
     }
 
@@ -89,25 +95,22 @@ export class Player {
     total () {
         let sum = 0
         for (let card of this.hand) {
-            if (card.name == 'A' && (sum + 11) > 21) {
-                sum += 1
-            } else (
-                sum += card.value
-            )
+            sum += card.value
         }
 
         if (sum > 21) {
             for (let card of this.hand) {
-                if (card.value == 'A') {
+                if (card.name == 'A') {
                     sum -= 10
-                    return sum
+                    if (sum < 22) {
+                        return sum
+                    }
                 }
             }
         }
         
         return sum
 
-        // return this.hand.reduce((acc, card) => acc + card.value, 0)
     }
 
     clearHand () {
@@ -129,6 +132,9 @@ export class Dealer extends Player {
         let child = document.getElementById('flippedCard')
         document.getElementById('dealer-1').removeChild(child)
         document.getElementById('dealer-1').appendChild(this.hand[0].createElement())
+        if (this.hand[0].value < 7) Deck.cardCount++;
+        else if (this.hand[0].value > 9) Deck.cardCount--;
+        console.log(Deck.cardCount)
     }
 
     hit (card) {
