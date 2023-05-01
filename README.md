@@ -1,7 +1,7 @@
 # BlackJack  
 Welcome to my Blackjack game built with JavaScript! This game is a web-based implementation of the classic card game, where the goal is to get as close to 21 points as possible without going over. In this game, you'll be playing against the computer, which acts as the dealer. The game features a simple and intuitive user interface, with easy-to-use controls and clear instructions to guide you through the game.
 ## How to play
-To play the game, simply navigate to [https://samtessema9.github.io/Project1/](https://samtessema9.github.io/Project1/) in your web browser. The game will load and you will be prompted to place your bet. Use the buttons on the screen to select your bet amount, and then click the "Deal" button to start the game.
+To play the game, simply navigate to [https://samtessema9.github.io/Project1/](https://samtessema9.github.io/Project1/) in your web browser. The game will load and you will be prompted to place your bet. Use the input field on the screen to select your bet amount, and then click the "Deal" button to start the game.
 
 Once the game has started, you will be dealt two cards and the dealer will be dealt one card face up. Follow the on-screen instructions to choose whether to hit, stand, or double down. The goal is to get as close to 21 as possible without going over.
 
