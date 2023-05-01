@@ -284,6 +284,7 @@ const runGame = async (deck, player, dealer, bet) => {
         stayButton.addEventListener('click', handleStay)
     }, 5000)
 
+    // add the handleDouble function to the double button
     setTimeout(() => {
         doubleButton.addEventListener('click', handleDouble)
     }, 5000)
@@ -318,6 +319,7 @@ dealButton.addEventListener('click', () => {
     
 })
 
+// add a togle option to the card counter 
 document.getElementById('toggle-help').addEventListener('click', () => {
     if (document.getElementById('cardCount').style.display == 'none') {
         document.getElementById('cardCount').style.display = 'flex'

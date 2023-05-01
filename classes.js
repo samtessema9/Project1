@@ -19,7 +19,7 @@ export class Deck {
 
     static cardCount = 0;
 
-    count = document.getElementById('count');
+    
     trueCount = document.getElementById('trueCount');
 
     constructor () {
@@ -51,7 +51,8 @@ export class Deck {
     deal (card) {
         if (card.value < 7) Deck.cardCount++;
         else if (card.value > 9) Deck.cardCount--;
-        this.count.innerText = `Count: ${Deck.cardCount}`
+        let count = document.getElementById('count');
+        count.innerText = `Count: ${Deck.cardCount}`
 
         return card.createElement();
     }
