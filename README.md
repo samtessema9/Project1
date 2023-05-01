@@ -15,7 +15,7 @@ The game's user interface is created using HTML and CSS, while the game logic is
 
 The game was designed to closely follow standard Blackjack rules, with a few minor tweaks to simplify the game for a single player. The user interface was designed to be simple and intuitive, with clear instructions and buttons to guide the player through each step of the game. 
 ## Unsolved Problems / Upcoming Features
-- **Deck Reload Functionality:** Currently, the game does not have a function to reload the deck once it has run out of cards. This means that the game can only be played once until the page is refreshed. In the future, I plan to add a function that allows the deck to be reloaded, so the game can be played continuously.
+- **Deck Reload Functionality:** Currently, the game does not have a function to reload the deck once it has run out of cards. This means that the game can only be played once until the page is refreshed. I plan to add a function that allows the deck to be reloaded, so the game can be played continuously.
 - **Money Reload Functionality:** At the moment, the game doesn't have a way to reload the player's balance once it runs out. This means that once the player runs out of money, the game cannot be played until the page is refreshed. I plan to add a function that allows the player to reload their balance in the future.
 - **Split Functionality:** Currently, the game does not have a split functionality, which is a common feature in blackjack. Splitting allows the player to split their hand into two separate hands if they are dealt a pair of cards with the same rank. This will be the most challenging feature to implement nut i plan to add it soon.
 ## Toughest challenges
