@@ -142,6 +142,7 @@ const runGame = async (deck, player, dealer, bet) => {
         if (player.total() > 21) {
             e.target.disabled = true;
             stayButton.disabled = true;
+            doubleButton.disabled = true;
             outPut.innerText = 'You busted!!!'
             handleLoss()
             setTimeout(resetGame, 4000) 
