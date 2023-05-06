@@ -1,4 +1,4 @@
-// Create a car object
+// Create a card object
 export class Card {
     constructor(name, suit, value) {
         this.name = name;
